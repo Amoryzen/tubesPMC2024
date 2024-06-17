@@ -118,6 +118,11 @@ int main() {
                 break;
             case 10:
                 {
+                    printf("Masukkan ID Pasien: ");
+                    fgets(ID_Pasien, sizeof(ID_Pasien), stdin);
+                    ID_Pasien[strcspn(ID_Pasien, "\n")] = '\0';  // Remove trailing newline
+
+                    cariRiwayatMedis(riwayatMedisPasien, sizeRiwayatMedis, ID_Pasien);
                     char Tanggal[20];
                     printf("Masukkan tanggal data yang ingin dihapus: ");
                     fgets(Tanggal, sizeof(Tanggal), stdin);
@@ -134,6 +139,7 @@ int main() {
                     ID_Pasien[strcspn(ID_Pasien, "\n")] = '\0';  // Remove trailing newline
 
                     cariRiwayatMedis(riwayatMedisPasien, sizeRiwayatMedis, ID_Pasien);
+                    saveData2(filename2, riwayatMedisPasien, sizeRiwayatMedis);
                     break;
                 }
 
