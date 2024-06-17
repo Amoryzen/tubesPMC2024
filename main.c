@@ -6,6 +6,9 @@
 // Maksimal jumlah pasien yang bisa di-load
 #define MAX_PASIEN 100
 
+// Maksiaml baris
+#define MAX_LINE_LENGTH 1024
+
 // Struktur untuk menyimpan data pasien
 typedef struct {
     int No;
@@ -49,12 +52,13 @@ void clearInputBuffer();
 void addData(Data_Pasien* data, int* count);
 void modifyData(Data_Pasien* data, int count);
 void saveData(char* filename, Data_Pasien* data, int count);
+void saveData2(char* filename, Riwayat_Medis_Pasien* data, int count);
 void hapusDataPasien(Data_Pasien* dataPasien, int* count);
 void cariDataPasien(Data_Pasien* dataPasien, int* count);
 void tambahRiwayatMedis(Riwayat_Medis_Pasien* riwayatMedis, int* count);
 void ubahRiwayatMedis(Riwayat_Medis_Pasien* riwayatMedis, int count);
-void hapusRiwayatMedis();
-void cariRiwayatMedis();
+void hapusRiwayatMedis(Riwayat_Medis_Pasien records[], int *recordCount, const char *Tanggal, const char *ID_Pasien);
+void cariRiwayatMedis(Riwayat_Medis_Pasien records[], int recordCount, const char *ID_Pasien);
 void laporanKeuangan(Riwayat_Medis_Pasien *riwayatMedisPasien, int sizeRiwayatMedis);
 void analisisPasienPenyakit(Riwayat_Medis_Pasien* riwayatMedisPasien, int sizeRiwayatMedis);
 void informasiKontrolPasien(Riwayat_Medis_Pasien* riwayatMedisPasien, int sizeRiwayatMedis);
@@ -64,11 +68,13 @@ void tulisRiwayatMedisPasien(const char* fileName, Riwayat_Medis_Pasien* riwayat
 int main() {
     // Load data pasien dari file CSV
     char* filename = "Data Pasien.csv";
+    char* filename2 = "Riwayat Datang, Diagnosis, dan Tindakan.csv";
     int sizeDataPasien, sizeRiwayatMedis, sizeBiayaTindakan;
     Data_Pasien* dataPasien = readDataPasien("Data Pasien.csv", &sizeDataPasien);
     Riwayat_Medis_Pasien* riwayatMedisPasien = readRiwayatMedis("Riwayat Datang, Diagnosis, dan Tindakan.csv", &sizeRiwayatMedis);    
     Biaya_Tindakan* biayaTindakan = readBiayaTindakan("Biaya Tindakan.csv", &sizeBiayaTindakan);
-
+    char ID_Pasien[20];
+    
     int pilihan;
     while (1) {
         tampilkanMenuUtama();
@@ -97,22 +103,46 @@ int main() {
                 break;
             case 6:
                 hapusDataPasien(dataPasien, &sizeDataPasien);
+                saveData(filename, dataPasien, sizeDataPasien);
                 break;
             case 7:
                 cariDataPasien(dataPasien, &sizeDataPasien);
                 break;
             case 8:
                 tambahRiwayatMedis(riwayatMedisPasien, &sizeRiwayatMedis);
+                saveData2(filename2, riwayatMedisPasien, sizeRiwayatMedis);
                 break;
             case 9:
                 ubahRiwayatMedis(riwayatMedisPasien, sizeRiwayatMedis);
+                saveData2(filename2, riwayatMedisPasien, sizeRiwayatMedis);
                 break;
             case 10:
-                hapusRiwayatMedis();
-                break;
+                {
+                    printf("Masukkan ID Pasien: ");
+                    fgets(ID_Pasien, sizeof(ID_Pasien), stdin);
+                    ID_Pasien[strcspn(ID_Pasien, "\n")] = '\0';  // Remove trailing newline
+
+                    cariRiwayatMedis(riwayatMedisPasien, sizeRiwayatMedis, ID_Pasien);
+                    char Tanggal[20];
+                    printf("Masukkan tanggal data yang ingin dihapus: ");
+                    fgets(Tanggal, sizeof(Tanggal), stdin);
+                    Tanggal[strcspn(Tanggal, "\n")] = '\0';  // Remove trailing newline
+
+                    hapusRiwayatMedis(riwayatMedisPasien, &sizeRiwayatMedis, Tanggal, ID_Pasien);
+                    saveData2(filename2, riwayatMedisPasien, sizeRiwayatMedis);
+                    break;
+                }
             case 11:
-                cariRiwayatMedis();
-                break;
+                {
+                    printf("Masukkan ID Pasien: ");
+                    fgets(ID_Pasien, sizeof(ID_Pasien), stdin);
+                    ID_Pasien[strcspn(ID_Pasien, "\n")] = '\0';  // Remove trailing newline
+
+                    cariRiwayatMedis(riwayatMedisPasien, sizeRiwayatMedis, ID_Pasien);
+                    saveData2(filename2, riwayatMedisPasien, sizeRiwayatMedis);
+                    break;
+                }
+
             case 12:
                 laporanKeuangan(riwayatMedisPasien, sizeRiwayatMedis);
                 break;
@@ -433,6 +463,30 @@ void saveData(char* filename, Data_Pasien* data, int count) {
         printf("Unable to open the file.\n");
     }
 }
+
+void saveData2(char* filename, Riwayat_Medis_Pasien* data, int count) {
+    FILE* file = fopen(filename, "w");
+
+    if (file != NULL) {
+        // Write the header line
+        fprintf(file, "No;Tanggal;ID Pasien;Diagnosis;Tindakan;Kontrol;Biaya (Rp)\n");
+
+        // Write the data
+        for (int i = 0; i < count; i++) {
+            // Remove any trailing newline character from the data strings
+            data[i].Tanggal[strcspn(data[i].Tanggal, "\n")] = 0;
+            data[i].ID_Pasien[strcspn(data[i].ID_Pasien, "\n")] = 0;
+            data[i].Diagnosis[strcspn(data[i].Diagnosis, "\n")] = 0;
+            data[i].Tindakan[strcspn(data[i].Tindakan, "\n")] = 0;
+            data[i].Kontrol[strcspn(data[i].Kontrol, "\n")] = 0;
+
+            fprintf(file, "%d;%s;%s;%s;%s;%s;%.2f\n", data[i].No, data[i].Tanggal, data[i].ID_Pasien, data[i].Diagnosis, data[i].Tindakan, data[i].Kontrol, data[i].Biaya);
+        }
+        fclose(file);
+    } else {
+        printf("Unable to open the file.\n");
+    }
+}
 // Akhir Bagian Dhika
 
 void hapusDataPasien(Data_Pasien* dataPasien, int* count) {
@@ -564,8 +618,39 @@ void ubahRiwayatMedis(Riwayat_Medis_Pasien* riwayatMedis, int count) {
 
     printf("Riwayat medis pada nomor ke-%d telah berhasil diubah.\n", no);
 }
-void hapusRiwayatMedis() {}
-void cariRiwayatMedis() {}
+void hapusRiwayatMedis(Riwayat_Medis_Pasien records[], int *recordCount, const char *Tanggal, const char *ID_Pasien) {
+    int found = 0;
+    for (int i = 0; i < *recordCount; i++) {
+        if (strcmp(records[i].ID_Pasien, ID_Pasien) == 0 && strcmp(records[i].Tanggal, Tanggal) == 0) {
+            for (int j = i; j < *recordCount - 1; j++) {
+                records[j] = records[j + 1];
+            }
+            (*recordCount)--;
+            found = 1;
+            break;
+        }
+    }
+    if (found) {
+        printf("Data dengan tanggal %s dan ID Pasien %s berhasil dihapus.\n", Tanggal, ID_Pasien);
+    } else {
+        printf("Data dengan tanggal %s dan ID Pasien %s tidak ditemukan.\n", Tanggal, ID_Pasien);
+    }
+}
+
+void cariRiwayatMedis(Riwayat_Medis_Pasien records[], int recordCount, const char *ID_Pasien) {
+    int found = 0;
+    for (int i = 0; i < recordCount; i++) {
+        if (strcmp(records[i].ID_Pasien, ID_Pasien) == 0) {
+            printf("%s;%s;%s;%s;%s;%.2lf\n", records[i].Tanggal, records[i].ID_Pasien,
+                   records[i].Diagnosis, records[i].Tindakan, records[i].Kontrol,
+                   records[i].Biaya);
+            found = 1;
+        }
+    }
+    if (!found) {
+        printf("Data dengan ID Pasien %s tidak ditemukan.\n", ID_Pasien);
+    }
+}
 
 void laporanKeuangan(Riwayat_Medis_Pasien* riwayatMedisPasien, int sizeRiwayatMedis) {
     // Struktur untuk menyimpan pendapatan per bulan dan per tahun
