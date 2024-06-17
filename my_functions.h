@@ -24,8 +24,19 @@ typedef struct {
 } Riwayat_Medis_Pasien;
 
 Data_Pasien *readDataPasien(const char* filename, int* count);
-char* hapusDataPasien(int n, Data_Pasien* dataPasien, int *count);
+Riwayat_Medis_Pasien* readRiwayatMedis(const char* filename, int* count);
+char* tambahDataPasien(char* name, char* address, char* city, char* birthplace, char* birthdate, int age, long long bpjs, char* id, Data_Pasien* data, int* count);
+char* ubahDataPasien(int num, char* name, char* address, char* city, char* birthplace, char* birthdate, int age, long long bpjs, char* id, Data_Pasien* data, int count);
 char* cariDataPasien(char name[], Data_Pasien *data_pasien, int *count);
+char* hapusDataPasien(char *name, Data_Pasien* dataPasien, int *count);
+char* tambahRiwayatMedisPasien(char *date, char *id, char *diagnosis, char *action, char *control, double bill, Riwayat_Medis_Pasien *riwayatMedis, int *count);
+char* ubahRiwayatMedisPasien(int num, char *date, char *id, char *diagnosis, char *action, char *control, double bill, Riwayat_Medis_Pasien* riwayatMedis, int count);
+char* hapusRiwayatMedisPasien(char *date, Riwayat_Medis_Pasien *riwayat_medis_pasien, int *count);
+char* cariRiwayatMedisPasien(char *date , Riwayat_Medis_Pasien *riwayat_medis_pasien, int *count);
+char* laporanKeuangan(Riwayat_Medis_Pasien* riwayatMedisPasien, int sizeRiwayatMedis);
+char* analisisPasienPenyakit(Riwayat_Medis_Pasien* riwayatMedisPasien, int sizeRiwayatMedis);
+char* informasiKontrolPasien(Riwayat_Medis_Pasien* riwayatMedisPasien, int sizeRiwayatMedis, const char* tanggalDicari);
+char* informasiKontrolPasienNew(char *date , Riwayat_Medis_Pasien *riwayat_medis_pasien, int *count);
 void tulisDataPasien(const char* filename, Data_Pasien* dataPasien, int count);
 void tulisRiwayatMedisPasien(const char* fileName, Riwayat_Medis_Pasien* riwayatMedisPasien, int count);
 
