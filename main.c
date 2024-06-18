@@ -904,7 +904,7 @@ void informasiKontrolPasien(Riwayat_Medis_Pasien* riwayatMedisPasien, int sizeRi
 
     int ditemukan = 0;
     for (int i = 0; i < sizeRiwayatMedis; i++) {
-        if (strcmp(riwayatMedisPasien[i].Tanggal, tanggalDicariFormatted) == 0) {
+        if (strcmp(riwayatMedisPasien[i].Kontrol, tanggalDicariFormatted) == 0) {
             if (!ditemukan) {
                 printf("Kontrol pada tanggal %s:\n", tanggalDicariFormatted);
             }
