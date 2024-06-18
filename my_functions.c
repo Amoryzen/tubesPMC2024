@@ -129,25 +129,94 @@ typedef struct {
     }
 
 // Ubah Data Pasien
+    // char* ubahDataPasien(int num, char* name, char* address, char* city, char* birthplace, char* birthdate, int age, long long bpjs, char* id, Data_Pasien* data, int count) {
+    //     for (int i = 0; i < count; i++) {
+    //         if (data[i].No == num) {
+    //             if (strcmp(name, NULL) != 0) {
+    //                 strncpy(data[i].Nama_Lengkap, name, sizeof(data[i].Nama_Lengkap) - 1);
+    //                 data[i].Nama_Lengkap[sizeof(data[i].Nama_Lengkap) - 1] = '\0';
+    //             }
+    //             if (strcmp(address, NULL) != 0) {
+    //                 strncpy(data[i].Alamat, address, sizeof(data[i].Alamat) - 1);
+    //                 data[i].Alamat[sizeof(data[i].Alamat) - 1] = '\0';
+    //             }
+    //             if (strcmp(city, NULL) != 0) {
+    //                 strncpy(data[i].Kota, city, sizeof(data[i].Kota) - 1);
+    //                 data[i].Kota[sizeof(data[i].Kota) - 1] = '\0';
+    //             }
+    //             if (strcmp(birthplace, NULL) != 0) {
+    //                 strncpy(data[i].Tempat_Lahir, birthplace, sizeof(data[i].Tempat_Lahir) - 1);
+    //                 data[i].Tempat_Lahir[sizeof(data[i].Tempat_Lahir) - 1] = '\0';
+    //             }
+    //             if (strcmp(birthdate, NULL) != 0) {
+    //                 strncpy(data[i].Tanggal_Lahir, birthdate, sizeof(data[i].Tanggal_Lahir) - 1);
+    //                 data[i].Tanggal_Lahir[sizeof(data[i].Tanggal_Lahir) - 1] = '\0';
+    //             }
+    //             if (age != 0)
+    //                 data[i].Umur = age;
+    //             if (bpjs != 0)
+    //                 data[i].No_BPJS = bpjs;
+    //             if (strcmp(id, NULL) != 0) {
+    //                 strncpy(data[i].ID_Pasien, id, sizeof(data[i].ID_Pasien) - 1);
+    //                 data[i].ID_Pasien[sizeof(data[i].ID_Pasien) - 1] = '\0';
+    //             }
+    //             if ((strcmp(name, NULL) == 0) || (strcmp(address, NULL) == 0) || (strcmp(city, NULL) == 0) || (strcmp(birthplace, NULL) == 0) || (strcmp(birthdate, NULL) == 0)) {
+    //                 break;
+    //                 return strdup("Tidak ada data yang diubah!\n");
+    //             }
+    //             break;
+    //             return strdup("Data berhasil diubah!\n");
+    //         }
+    //     }
+    //     return strdup("Nomor yang dimasukkan tidak valid!\n");
+    // }
     char* ubahDataPasien(int num, char* name, char* address, char* city, char* birthplace, char* birthdate, int age, long long bpjs, char* id, Data_Pasien* data, int count) {
+        int dataChanged = 0;
         for (int i = 0; i < count; i++) {
             if (data[i].No == num) {
-                strncpy(data[i].Nama_Lengkap, name, sizeof(data[i].Nama_Lengkap) - 1);
-                data[i].Nama_Lengkap[sizeof(data[i].Nama_Lengkap) - 1] = '\0';
-                strncpy(data[i].Alamat, address, sizeof(data[i].Alamat) - 1);
-                data[i].Alamat[sizeof(data[i].Alamat) - 1] = '\0';
-                strncpy(data[i].Kota, city, sizeof(data[i].Kota) - 1);
-                data[i].Kota[sizeof(data[i].Kota) - 1] = '\0';
-                strncpy(data[i].Tempat_Lahir, birthplace, sizeof(data[i].Tempat_Lahir) - 1);
-                data[i].Tempat_Lahir[sizeof(data[i].Tempat_Lahir) - 1] = '\0';
-                strncpy(data[i].Tanggal_Lahir, birthdate, sizeof(data[i].Tanggal_Lahir) - 1);
-                data[i].Tanggal_Lahir[sizeof(data[i].Tanggal_Lahir) - 1] = '\0';
-                data[i].Umur = age;
-                data[i].No_BPJS = bpjs;
-                strncpy(data[i].ID_Pasien, id, sizeof(data[i].ID_Pasien) - 1);
-                data[i].ID_Pasien[sizeof(data[i].ID_Pasien) - 1] = '\0';
-                break;
-                return strdup("Data berhasil diubah!\n");
+                if (name != NULL && strlen(name) > 0) {
+                    strncpy(data[i].Nama_Lengkap, name, sizeof(data[i].Nama_Lengkap) - 1);
+                    data[i].Nama_Lengkap[sizeof(data[i].Nama_Lengkap) - 1] = '\0';
+                    dataChanged = 1;
+                }
+                if (address != NULL && strlen(address) > 0) {
+                    strncpy(data[i].Alamat, address, sizeof(data[i].Alamat) - 1);
+                    data[i].Alamat[sizeof(data[i].Alamat) - 1] = '\0';
+                    dataChanged = 1;
+                }
+                if (city != NULL && strlen(city) > 0) {
+                    strncpy(data[i].Kota, city, sizeof(data[i].Kota) - 1);
+                    data[i].Kota[sizeof(data[i].Kota) - 1] = '\0';
+                    dataChanged = 1;
+                }
+                if (birthplace != NULL && strlen(birthplace) > 0) {
+                    strncpy(data[i].Tempat_Lahir, birthplace, sizeof(data[i].Tempat_Lahir) - 1);
+                    data[i].Tempat_Lahir[sizeof(data[i].Tempat_Lahir) - 1] = '\0';
+                    dataChanged = 1;
+                }
+                if (birthdate != NULL && strlen(birthdate) > 0) {
+                    strncpy(data[i].Tanggal_Lahir, birthdate, sizeof(data[i].Tanggal_Lahir) - 1);
+                    data[i].Tanggal_Lahir[sizeof(data[i].Tanggal_Lahir) - 1] = '\0';
+                    dataChanged = 1;
+                }
+                if (age != 0) {
+                    data[i].Umur = age;
+                    dataChanged = 1;
+                }
+                if (bpjs != 0) {
+                    data[i].No_BPJS = bpjs;
+                    dataChanged = 1;
+                }
+                if (id != NULL && strlen(id) > 0) {
+                    strncpy(data[i].ID_Pasien, id, sizeof(data[i].ID_Pasien) - 1);
+                    data[i].ID_Pasien[sizeof(data[i].ID_Pasien) - 1] = '\0';
+                    dataChanged = 1;
+                }
+                if (dataChanged) {
+                    return strdup("Data berhasil diubah!\n");
+                } else {
+                    return strdup("Tidak ada data yang diubah!\n");
+                }
             }
         }
         return strdup("Nomor yang dimasukkan tidak valid!\n");
@@ -216,6 +285,35 @@ typedef struct {
     }
 
 // Ubah Riwayat Medis Pasien
+    // char* ubahRiwayatMedisPasien(int num, char *date, char *id, char *diagnosis, char *action, char *control, double bill, Riwayat_Medis_Pasien* riwayatMedis, int count) {
+    //     // Check if the given record number is valid
+    //     if (num <= 0 || num > count) {
+    //         char* error = (char*)malloc(50);
+    //         strcpy(error, "Nomor riwayat medis tidak valid!\n");
+    //         return error;
+    //     }
+    //     // Create a temporary record with the provided data
+    //     Riwayat_Medis_Pasien perubahan;
+    //     perubahan.No = num;
+    //     // Copy the provided data into the temporary record
+    //     strncpy(perubahan.Tanggal, date, sizeof(perubahan.Tanggal) - 1);
+    //     perubahan.Tanggal[sizeof(perubahan.Tanggal) - 1] = '\0';
+    //     strncpy(perubahan.ID_Pasien, id, sizeof(perubahan.ID_Pasien) - 1);
+    //     perubahan.ID_Pasien[sizeof(perubahan.ID_Pasien) - 1] = '\0';
+    //     strncpy(perubahan.Diagnosis, diagnosis, sizeof(perubahan.Diagnosis) - 1);
+    //     perubahan.Diagnosis[sizeof(perubahan.Diagnosis) - 1] = '\0';
+    //     strncpy(perubahan.Tindakan, action, sizeof(perubahan.Tindakan) - 1);
+    //     perubahan.Tindakan[sizeof(perubahan.Tindakan) - 1] = '\0';
+    //     strncpy(perubahan.Kontrol, control, sizeof(perubahan.Kontrol) - 1);
+    //     perubahan.Kontrol[sizeof(perubahan.Kontrol) - 1] = '\0';
+    //     perubahan.Biaya = bill;
+    //     // Update the record in the array
+    //     riwayatMedis[num - 1] = perubahan;
+    //     // Allocate memory for the success message
+    //     char* success = (char*)malloc(100);
+    //     snprintf(success, 100, "Riwayat medis pada nomor ke-%d telah berhasil diubah!\n", num);
+    //     return success;
+    // }
     char* ubahRiwayatMedisPasien(int num, char *date, char *id, char *diagnosis, char *action, char *control, double bill, Riwayat_Medis_Pasien* riwayatMedis, int count) {
         // Check if the given record number is valid
         if (num <= 0 || num > count) {
@@ -224,19 +322,28 @@ typedef struct {
             return error;
         }
         // Create a temporary record with the provided data
-        Riwayat_Medis_Pasien perubahan;
-        perubahan.No = num;
+        Riwayat_Medis_Pasien perubahan = riwayatMedis[num - 1];
         // Copy the provided data into the temporary record
-        strncpy(perubahan.Tanggal, date, sizeof(perubahan.Tanggal) - 1);
-        perubahan.Tanggal[sizeof(perubahan.Tanggal) - 1] = '\0';
-        strncpy(perubahan.ID_Pasien, id, sizeof(perubahan.ID_Pasien) - 1);
-        perubahan.ID_Pasien[sizeof(perubahan.ID_Pasien) - 1] = '\0';
-        strncpy(perubahan.Diagnosis, diagnosis, sizeof(perubahan.Diagnosis) - 1);
-        perubahan.Diagnosis[sizeof(perubahan.Diagnosis) - 1] = '\0';
-        strncpy(perubahan.Tindakan, action, sizeof(perubahan.Tindakan) - 1);
-        perubahan.Tindakan[sizeof(perubahan.Tindakan) - 1] = '\0';
-        strncpy(perubahan.Kontrol, control, sizeof(perubahan.Kontrol) - 1);
-        perubahan.Kontrol[sizeof(perubahan.Kontrol) - 1] = '\0';
+        if (date != NULL && strlen(date) > 0) {
+            strncpy(perubahan.Tanggal, date, sizeof(perubahan.Tanggal) - 1);
+            perubahan.Tanggal[sizeof(perubahan.Tanggal) - 1] = '\0';
+        }
+        if (id != NULL && strlen(id) > 0) {
+            strncpy(perubahan.ID_Pasien, id, sizeof(perubahan.ID_Pasien) - 1);
+            perubahan.ID_Pasien[sizeof(perubahan.ID_Pasien) - 1] = '\0';
+        }
+        if (diagnosis != NULL && strlen(diagnosis) > 0) {
+            strncpy(perubahan.Diagnosis, diagnosis, sizeof(perubahan.Diagnosis) - 1);
+            perubahan.Diagnosis[sizeof(perubahan.Diagnosis) - 1] = '\0';
+        }
+        if (action != NULL && strlen(action) > 0) {
+            strncpy(perubahan.Tindakan, action, sizeof(perubahan.Tindakan) - 1);
+            perubahan.Tindakan[sizeof(perubahan.Tindakan) - 1] = '\0';
+        }
+        if (control != NULL && strlen(control) > 0) {
+            strncpy(perubahan.Kontrol, control, sizeof(perubahan.Kontrol) - 1);
+            perubahan.Kontrol[sizeof(perubahan.Kontrol) - 1] = '\0';
+        }
         perubahan.Biaya = bill;
         // Update the record in the array
         riwayatMedis[num - 1] = perubahan;

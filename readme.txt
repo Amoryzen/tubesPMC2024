@@ -1,0 +1,1 @@
+jalankan fungsi `gtk.c` dengan command: "gcc -o 
