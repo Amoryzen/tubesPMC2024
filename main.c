@@ -819,6 +819,30 @@ void analisisPasienPenyakit(Riwayat_Medis_Pasien* riwayatMedisPasien, int sizeRi
 
         datapenyakit[tahunDitemukan].banyakpenyakitbulanan[penyakitIndex][bulan]++;
     }
+    
+    // Urutkan jenis penyakit berdasarkan jumlah total penyakit per tahun
+    for (int i = 0; i < jumlahTahun; i++) {
+        for (int j = 0; j < datapenyakit[i].penyakitCount - 1; j++) {
+            for (int k = j + 1; k < datapenyakit[i].penyakitCount; k++) {
+                int totalPenyakitJ = 0;
+                int totalPenyakitK = 0;
+                for (int m = 0; m < 12; m++) {
+                    totalPenyakitJ += datapenyakit[i].banyakpenyakitbulanan[j][m];
+                    totalPenyakitK += datapenyakit[i].banyakpenyakitbulanan[k][m];
+                }
+                if (totalPenyakitK > totalPenyakitJ) {
+                    // Tukar jenis penyakit
+                    char* tempJenis = datapenyakit[i].jenispenyakit[j];
+                    datapenyakit[i].jenispenyakit[j] = datapenyakit[i].jenispenyakit[k];
+                    datapenyakit[i].jenispenyakit[k] = tempJenis;
+                    // Tukar banyak penyakit bulanan
+                    int* tempBanyak = datapenyakit[i].banyakpenyakitbulanan[j];
+                    datapenyakit[i].banyakpenyakitbulanan[j] = datapenyakit[i].banyakpenyakitbulanan[k];
+                    datapenyakit[i].banyakpenyakitbulanan[k] = tempBanyak;
+                }
+            }
+        }
+    }
 
     // Hitung dan tampilkan setiap jenis penyakit per bulan dan per tahun
     char* spasi; int total;
